@@ -1,0 +1,27 @@
+<div class="row gx-5">
+  <div class="row g-3">
+    <h1>Log in</h1>
+
+    <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user], fn f -> %>
+      <%= if @error_message do %>
+        <div class="alert alert-danger">
+          <p><%= @error_message %></p>
+        </div>
+      <% end %>
+      <div class="col-auto input-group">
+        <%= email_input f, :email, class: "form-control", placeholder: "Email", required: true %>
+
+        <%= password_input f, :password, class: "form-control", placeholder: "Password", required: true %>
+      </div>
+        <%= label f, :remember_me, "Keep me logged in for 60 days" %>
+        <%= checkbox f, :remember_me %>
+        <br>
+
+        <%= submit "Log in", class: "btn btn-dark input-group-text" %>
+    <% end %>
+  </div>
+    <p>
+      <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
+      <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
+    </p>
+</div>

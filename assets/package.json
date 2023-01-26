@@ -1,0 +1,18 @@
+{
+  "name": "assets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@popperjs/core": "^2.11.6",
+    "@tabler/core": "^1.0.0-beta15",
+    "alpinejs": "^3.10.3",
+    "bootstrap": "^5.2.2"
+  }
+}

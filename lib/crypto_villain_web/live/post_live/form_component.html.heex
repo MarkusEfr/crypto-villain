@@ -1,0 +1,51 @@
+<div>
+  <.form let={f} for={@changeset} id="post-form" phx-target={@myself} phx-change="validate" phx-submit="save">
+    <div class="mb-3">
+      <%= label f, :content, class: "form-label" %>
+      <%= textarea f, :content, class: "form-control", rows: 5, required: true, minlength: "10", maxlength: "500" %>
+      <%= error_tag f, :content %>
+    </div>
+    <div class="mb-3">
+      <section phx-drop-target={@uploads.image.ref}>
+        <.live_file_input upload={@uploads.image} class="form-control form-control-lg"/>
+        <div :if={!Enum.empty?(@uploads.image.entries)}>
+          <hr>
+
+          <%= for entry <- @uploads.image.entries do %>
+            <article class="upload-entry">
+          
+              <figure>
+                <.live_img_preview entry={entry} class="preview-entry"/>
+                <figcaption><%= entry.client_name %></figcaption>
+              </figure>
+              <div class="row gx-5">
+                <div class="col col-sm">
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-label="Image upload progress" aria-valuenow={entry.progress} style={"width: #{entry.progress}%"} aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+                <div class="col col-1">
+                  <button class="btn btn-danger btn-sm" phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">
+                    <%= Bootstrap.Icons.x() %>
+                  </button>
+                </div>
+              </div>
+
+              <%= for err <- upload_errors(@uploads.image, entry) do %>
+                <p class="alert alert-danger"><%= error_to_string(err) %></p>
+              <% end %>
+          
+            </article>
+          <% end %>
+        </div>
+
+        <%= for err <- upload_errors(@uploads.image) do %>
+          <p class="alert alert-danger"><%= error_to_string(err) %></p>
+        <% end %>
+        </section>
+    </div>
+    <div>
+      <%= submit "Save" , phx_disable_with: "Saving...", class: "btn btn-outline-dark" %>
+    </div>
+  </.form>
+</div>

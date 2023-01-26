@@ -1,0 +1,24 @@
+<div class="col-2 gx-5 py-5">
+    <div class="row gx-0 px-5 py-5">
+        <div class="col-1 menu-action position-fixed" }>
+            <%= live_patch to: Routes.post_index_path(@socket, :new) do %>
+                <img src={Routes.static_path(@socket, "/images/write.png" )} />
+            <% end %>
+        </div>
+    </div>
+    <br /><br />
+    <div class="row gx-0 px-5 py-5">
+        <div class="col-1 menu-action position-fixed " }>
+            <%= live_patch to: Routes.follow_index_path(@socket, :index, %{current_user: @current_user}) do %>
+                <img src={Routes.static_path(@socket, "/images/follows.png" )} />
+            <% end %>
+        </div>
+    </div>
+    <br /><br />
+    <div class="row gx-0 px-5 py-5">
+        <div class="col-1 menu-action position-fixed " }>
+            <img data-bs-toggle="offcanvas" href={"#user-crypto"} role="button" phx-click="show_change" phx-target={"#coin-live"}
+                src={Routes.static_path(@socket, "/images/cryptocurrency.png" )} />
+        </div>
+    </div>
+</div>

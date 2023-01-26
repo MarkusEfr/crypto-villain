@@ -1,0 +1,51 @@
+<div id={"user-crypto"} class={"offcanvas offcanvas-start #{if @show do "show" end}" } 
+    data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Cryptocurrency Observer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" phx-click="show_change" phx-target={"#coin-live"}></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="coins-menu">
+            <.form let={f} for={:query} id="search-form" phx-target={"#coin-live"} phx-change="search">
+                <div class="input-group mb-3">
+                    <%= text_input f, :query, value: @search, class: "form-control" , placeholder: "Search for a coins", "phx-debounce": "800" %>
+                    <span class="input-group-text">
+                        <%= Bootstrap.Icons.search()%>
+                    </span>
+                </div>
+            </.form>
+            <ol :if={@search_coins != nil} class="list-group list-group-numbered">
+                <li :for={coin <- @search_coins} class="list-group-item d-flex align-items-start" id={"#{coin.name}"}>
+                  <div class="ms-2 me-auto col-md">
+                    <div class="fw-bold">
+                        <%= coin.name %>
+                    </div>
+                  </div>
+                  <div :if={@current_user}>
+                    <span class="favorite-coin px-2 pb-1 col-1" phx-click="favorite_coin" phx-target={"#coin-live"} phx-value-coin={coin.name} phx-value-user={@current_user.id}>
+                        <span class="favorite-coin-active" :if={coin.is_favorite}>
+                            <%= Bootstrap.Icons.star_fill()%>
+                        </span>
+                        <span :if={!coin.is_favorite}>
+                            <%= Bootstrap.Icons.star()%>
+                        </span>
+                    </span>
+                  </div>
+                    
+                  <span class="badge theme-bg rounded-pill mt-1 col-3">
+                    $   <%= coin.price %>
+                  </span>
+                </li>
+            </ol>
+        </div>
+        <br>
+        <.live_component 
+        id="threshold-component"
+        module={CryptoVillainWeb.CoinLive.ThresholdComponent}
+        current_user={@current_user} 
+        show_threshold={@show_threshold} 
+        threshold={@threshold}
+        changeset={@changeset} 
+        coins_threshold={@coins_threshold} />
+    </div>
+</div>

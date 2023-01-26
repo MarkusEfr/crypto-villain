@@ -1,0 +1,65 @@
+<div class="col-sm py-5">
+    <ul class="nav nav-tabs" id="followings-nav" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link theme-color active" id="follows-tab" data-bs-toggle="tab" data-bs-target="#follows-tab-pane"
+                type="button" role="tab" aria-controls="follows-tab-pane" aria-selected="true">Follows</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link theme-color" id="subscribers-tab" data-bs-toggle="tab" data-bs-target="#subscribers-tab-pane"
+                type="button" role="tab" aria-controls="subscribers-tab-pane" aria-selected="false">Subscribers</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="followings-nav-content">
+        <div class="tab-pane fade show active" id="follows-tab-pane" role="tabpanel" aria-labelledby="follows-tab"
+            tabindex="0">
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">Operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr :for={follow <- @follows}>
+                        <td>
+                            <%= follow.email %>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-light" phx-click="delete" phx-value-id={follow.id}>
+                                <%= Bootstrap.Icons.person_x() %>
+                                    <a> Unsubscribe </a>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="subscribers-tab-pane" role="tabpanel" aria-labelledby="subscribers-tab"
+            tabindex="0">
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">Operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr :for={subscriber <- @subscribers}>
+                        <td>
+                            <%= subscriber.email %>
+                        </td>
+                        <td>
+                            <.live_component 
+                                module={CryptoVillainWeb.FollowLive.Subscription} 
+                                id={"subscriber-#{subscriber.id}"} 
+                                current_user={@current_user} 
+                                follow_user_id={subscriber.user_id}
+                                subscription={subscriber.subscription}
+                                />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

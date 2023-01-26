@@ -1,0 +1,83 @@
+<div class="col-sm me-5">
+  <%= if @current_user do%>
+    <CryptoVillainWeb.MenuComponent.render
+      feed={@feed}
+      current_user={@current_user}>
+    </CryptoVillainWeb.MenuComponent.render>
+  <% end %>
+
+  <%= if @live_action in [:new, :edit] do %>
+    <ModalComponent.render
+      return_to={Routes.post_index_path(@socket, :index)}
+      footer_text="support@crypto_villain">
+      <:header>
+        <h2>
+          <%= @page_title %>
+        </h2>
+      </:header>
+      <.live_component
+        module={CryptoVillainWeb.PostLive.FormComponent}
+        current_user={@current_user}
+        id={@post.id || :new}
+        action={@live_action}
+        post={@post}
+        return_to={Routes.post_index_path(@socket, :index)} />
+    </ModalComponent.render>
+  <% end %>
+  <div class="container-fluid overflow-hidden">
+    <div class="row gx-5">
+      <div class="col mx-4">
+          <div :for={post <- @posts} class="card shadow-lg border-dark mb-5 my-3" id={"post-#{post.id}"}>
+            <div :if={post.image != nil}>
+              <img src={Routes.static_path(@socket,  post.image )} class="bd-placeholder-img" alt="Post image" width="100%" height="180">
+            </div>
+            <div class="card-header">
+              <%= post.author %>, said at
+              <%= NaiveDateTime.to_string(post.inserted_at) %>
+            </div>
+            <div class="card-body">
+              <%= post.content %>
+            </div>
+              <div :if={@current_user} class="card-footer">
+                  <div :if={can_manage?(@current_user, post)} class="post-actions">
+                    <%= live_patch Bootstrap.Icons.pencil(), to: Routes.post_index_path(@socket, :edit, post),class: "btn btn-sm btn-light" %>
+                    <%= link Bootstrap.Icons.trash(), to: "#" , phx_click: "delete" , phx_value_id: post.id, data: [confirm: "Are you sure?" ], class: "btn btn-sm btn-light" %>
+                  </div>
+                  <div :if={!can_manage?(@current_user, post)}>
+                   <.live_component
+                    module={CryptoVillainWeb.FollowLive.Subscription}
+                    id={"subscribe-#{post.id}-author"}
+                    current_user={@current_user}
+                    follow_user_id={post.user_id}
+                    subscription={post.subscription}
+                    return_to={Routes.post_index_path(@socket, :index)}
+                    />
+                  </div>
+              </div>
+          </div>
+
+          <nav :if={@meta.total_pages > 0} aria-label="Posts page navigation">
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a class={"page-link #{if !@meta.previous_page do "disabled" end}" } href="#" aria-label="Previous"
+                  phx-click="show_feed" phx-value-page={@meta.previous_page}, phx-value-feed={@feed}>
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li :for={page <- 1..@meta.total_pages} class="page-item">
+                <a class="page-link" href="#"
+                  phx-click="show_feed" phx-value-page={page}, phx-value-feed={@feed}>
+                  <%= inspect page%>
+                </a></li>
+              <li class="page-item">
+                <a class={"page-link #{if !@meta.next_page do "disabled" end}" } href="#" aria-label="Next"
+                  phx-click="show_feed" phx-value-page={@meta.next_page}, phx-value-feed={@feed}>
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+      </div>
+    </div>
+  </div>
+</div>

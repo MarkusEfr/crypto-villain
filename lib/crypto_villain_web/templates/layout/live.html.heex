@@ -1,0 +1,8 @@
+<main class="container">
+  <%= render "_flash.html", flash: @flash %>
+  <div class="row gx-5">
+    <%= render "_live_menu.html", current_user: @current_user, socket: @socket %>
+    <%= @inner_content %>
+    <%= live_render(@socket, CryptoVillainWeb.CoinLive.Index, id: "coin-live") %>
+  </div>
+</main>

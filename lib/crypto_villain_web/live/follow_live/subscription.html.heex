@@ -1,0 +1,11 @@
+<div>
+    <button :if={@subscription==:nil} class="btn btn-sm btn-light" phx-click="create" phx-target={@myself}
+        phx-value-follow_user_id={@follow_user_id} phx-value-user_id={@current_user.id}>
+        <a> Subscribe </a>
+    </button>
+    <button :if={@subscription !=:nil} class="btn btn-sm btn-light" phx-click="delete" phx-target={@myself}
+        phx-value-follow_user_id={@follow_user_id} phx-value-user_id={@current_user.id}>
+        <%= Bootstrap.Icons.check() %>
+            <a> Subscribed </a>
+    </button>
+</div>

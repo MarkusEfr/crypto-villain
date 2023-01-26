@@ -1,0 +1,10 @@
+<div class="flash">  
+    <p :if={live_flash(@flash, :info)} class="alert alert-dark" role="alert" phx-click="lv:clear-flash" phx-value-key="info">
+      <%= live_flash(@flash, :info) %>
+      <%= Bootstrap.Icons.info_circle() %>
+    </p>
+    <p :if={live_flash(@flash, :error)} class="alert alert-danger" role="alert" phx-click="lv:clear-flash" phx-value-key="error">
+      <%= live_flash(@flash, :error) %>
+      <%= Bootstrap.Icons.exclamation_triangle() %>
+    </p>
+</div>
